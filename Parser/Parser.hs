@@ -1,22 +1,11 @@
+-- Feito por Marlon Henry Schweigert
+
 import Text.ParserCombinators.Parsec
 import Data.Char
 
-data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp | Par Exp | Var String
+data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp | Par Exp | Var String deriving Show
 
 {-
-
-	E -> E+E
-	   | E*E
-	   | E->E
-	   | E<->E
-	   | !E
-	   | (E)
-	   | V
-	   
-	V -> T
-	   | F
-
-   
 
     ------------------------------
 
@@ -65,68 +54,139 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp 
      V: !V
       | W
 
-    W: C
+    W: c
      | (E)
+
+    E - inicio
+    c - variaveis
 -}
+
+
 
 ret v1 Nothing = v1
 ret v1 (Just (op, v2)) = op v1 v2
 
-expToTree e = parse exp "Erro:" e
+main = do {putStr "\nExpressao:";
+          e <- getLine;
+		  case expToTree e of
+			Left err -> putStr ((show err)++ "\n")
+			Right r  -> putStr ((show r) ++ "\n")}
 
-{-
-exp = do {
-    v1 <- termo
-    o <- op
-    return ( ret v1 o)
-}
+expToTree e = parse elang "Erro:" e
 
-exp' = do {
-            char '&';
-            v1 <- termo;
-            e <- exp';
-            return (Just ((And), ret v1 e))
+
+
+-- E: FE'
+elang = do {
+        f <- flang;
+        e' <- elang';
+        return (ret f e')
+    }
+
+    
+--    E': <->FE'
+--      | Vazio
+
+elang' = do {
+        string "<->";
+        f <- flang;
+        e' <- elang';
+        return (Just((Bimp),ret f e'))
+    }
+    <|> return Nothing
+
+--     F: SF'
+
+flang = do {
+            s <- slang;
+            f' <- flang';
+            return (ret s f')
         }
-        <|> do {
-            char '|';
-            v1 <- termo;
-            e <- exp';
-            return (Just((Or), ret v1 e))
-        }
-        <|> return Nothing
 
-termo = do {
-    v1 <- fator
-    e <- termo'
-    return (ret v1 e)
-}
+--    F':  ->SF'
+--      | Vazio
 
-termo' = do {
-            string "<->";
-            v1 <- fator;
-            e <- termo';
-            return (Just (Bimp, ret v1 e))
-        }
-        <|> do {
+flang' = do {
             string "->";
-            v1 <- fator;
-            e <- termo';
-            return (Just (Imp, ret v1 e))
+            s <- slang;
+            f' <- flang';
+            return (Just((Imp), ret s f') ) 
         }
         <|> return Nothing
 
-fator = terminal 
-        <|> do {char '(';
-                e <- exp; char ')';
-                return (Par e)
-               }
+--     S: RS'
 
-terminal = negacao <|> bool <|> var
+slang = do {
+            r <- rlang;
+            s' <- slang';
+            return (ret r s')
+        }
+    
+--    S': |RS'
+--      | Vazio
 
-negacao = do {char '!'; e <- exp; return (Not e)}
+slang' = do {
+            char '|';
+            r <- rlang;
+            s' <- slang';
+            return (Just((Or), ret r s'))
+        }
+        <|> return Nothing
 
-var = do { return Noting }
+--     R: VR'
 
-bool = do { char '1'; return Value True }
-      <|> { char '0'; return Value False }
--}
+rlang = do {
+            v <- vlang;
+            r' <- rlang';
+            return (ret v r');
+        }
+
+--    R': &VR'
+--      | Vazio
+
+rlang' = do {
+            char '&';
+            v <- vlang;
+            r' <- rlang';
+            return (Just((And), ret v r'))
+        }
+        <|> return Nothing
+
+--     V: !V
+--      | W
+
+vlang = do {
+            char '!';
+            v <- vlang;
+            return (Not v)
+        }
+        <|> do {
+                w <- wlang;
+                return (w)
+            }
+
+--    W: c
+--     | (E)
+
+wlang = do {
+            char '1'
+            return (Value True)
+        }
+        <|> do {
+            char '0'
+            return (Value False)
+        }
+        <|> do {
+            variable <- many1 digit;
+            return (Var (show variable))
+        }
+        <|> do {
+            char '(';
+            e <- elang;
+            char ')';
+            return e;
+        }
+
+--    E - inicio
+--    c - variaveis
+
