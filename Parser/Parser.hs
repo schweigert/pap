@@ -196,3 +196,13 @@ wlang = do {
 --    E - inicio
 --    c - variaveis
 
+--list do marlons e eu
+
+solve (Value a) = a
+solve (And a b) = (solve a) && (solve b)
+solve (Or a b) = (solve a) || (solve b)
+
+imp False False = True
+imp False True = True
+imp True False = False
+imp True True = True
