@@ -1,3 +1,7 @@
+-- Este código está protegido pela lei dos homens e pela leis de Deus, pq néh
+--só ele sabe como essa desgraça funciona
+
+{-# LANGUAGE FlexibleContexts #-}
 -- Feito por Marlon Henry Schweigert
 
 import Text.ParserCombinators.Parsec
@@ -13,7 +17,7 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp 
         | F
 
     F -> F -> S
-        | S
+        | S,
 
     S -> S | R
         | R
@@ -51,7 +55,7 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp 
     R': &VR'
       | Vazio
 
-     V: !V
+     V: !E
       | W
 
     W: c
@@ -157,7 +161,7 @@ rlang' = do {
 
 vlang = do {
             char '!';
-            v <- vlang;
+            v <- elang;
             return (Not v)
         }
         <|> do {
@@ -169,11 +173,11 @@ vlang = do {
 --     | (E)
 
 wlang = do {
-            char '1'
+            char '1';
             return (Value True)
         }
         <|> do {
-            char '0'
+            char '0';
             return (Value False)
         }
         <|> do {
