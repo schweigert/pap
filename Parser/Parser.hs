@@ -7,7 +7,7 @@
 import Text.ParserCombinators.Parsec
 import Data.Char
 
-data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp | Par Exp | Var String deriving Show
+data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp Exp | Bimp Exp Exp | Par Exp | Var String deriving Show
 
 {-
 
@@ -55,7 +55,7 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp 
     R': &VR'
       | Vazio
 
-     V: !E
+     V: !V
       | W
 
     W: c
@@ -64,7 +64,6 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp | Bimp Exp 
     E - inicio
     c - variaveis
 -}
-
 
 
 ret v1 Nothing = v1
@@ -98,6 +97,8 @@ elang' = do {
         return (Just((Bimp),ret f e'))
     }
     <|> return Nothing
+
+
 
 --     F: SF'
 
@@ -161,7 +162,7 @@ rlang' = do {
 
 vlang = do {
             char '!';
-            v <- elang;
+            v <- vlang;
             return (Not v)
         }
         <|> do {
@@ -181,8 +182,9 @@ wlang = do {
             return (Value False)
         }
         <|> do {
-            variable <- many1 digit;
-            return (Var (show variable))
+            letra <- letter; 
+            variable <- many (digit <|> letter);
+            return (Var (show [letra:variable]))	
         }
         <|> do {
             char '(';
