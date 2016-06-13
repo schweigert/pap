@@ -184,7 +184,7 @@ wlang = do {
         <|> do {
             letra <- letter; 
             variable <- many (digit <|> letter);
-            return (Var (show [letra:variable]))	
+            return (Var ([letra]++variable))	
         }
         <|> do {
             char '(';
