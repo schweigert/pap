@@ -68,16 +68,34 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp Exp | Bimp 
 ret v1 Nothing = v1
 ret v1 (Just (op, v2)) = op v1 v2
 
+bin m n = take m (reverse (toBin n) ++ ['0'..])
+	where
+		toBin 1 = "1"
+		toBin 0 = "0"
+		toBin x = if mod x 2 == 1 then "1" ++ (toBin (div x 2))
+								  else "0" ++ (toBin (div x 2)) 
+atribui [] = []
+atribui a = montar a [0..]
+	where
+		montar [] _ = []
+		montar (x:xs) (y:ys) = (x,y): montar xs ys
+
 main = do {putStr "\nExpressao:";
           e <- getLine;
 		  case expToTree ([x | x <- e, x /= ' ']) of
 			Left err -> putStr ((show err)++ "\n")
-			Right arv  -> do {
-				putStr ("Arvore criada: \n");
-				putStr ((show arv) ++ "\n");
-				putStr "Variáveis: \n";
-				putStr (show (mapear arv)++"\n")
-			}}
+			Right arv  -> do 
+				
+				putStr ("Arvore criada: \n")
+				putStr ((show arv) ++ "\n")
+				putStr "Variáveis: \n"
+				let lista = mapear(arv)
+				    binli = map (bin (length lista)) [0..(length lista)^2 - 1]
+				putStr (show (lista)++"\n")
+				putStr (show (binli)++"\n")
+				
+				
+			}
 
 expToTree e = parse elang "Erro:" e
 	
@@ -216,10 +234,10 @@ solve (Bimp a b) = bimp (solve a) (solve b)
 		bimp False True = False
 		bimp True False = False
 		bimp True True = True	
-solve (Not a) = if (solve a) then False else True
+solve (Not a) = if solve a then False else True
 solve (Var a) = True
 
-mapear e = [x | x <- mapear_ e, x 
+mapear e = removeDuplicates mapa
 	where
 		mapear_ (Value _) = []
 		mapear_ (And a b) = mapear_ a ++ mapear_ b
@@ -228,6 +246,9 @@ mapear e = [x | x <- mapear_ e, x
 		mapear_ (Bimp a b) = mapear_ a ++ mapear_ b
 		mapear_ (Not a) = mapear_ a
 		mapear_ (Var a) = [a]
-		remover a [] = []
-		remover a (x:xs) = if a == x then remover xs else x : remover xs
+		mapa = mapear_ e
+		removeDuplicates = foldl (\seen x -> if x `elem` seen
+                                      then seen
+                                      else seen ++ [x]) []
 		
+
