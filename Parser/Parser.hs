@@ -251,4 +251,7 @@ mapear e = removeDuplicates mapa
                                       then seen
                                       else seen ++ [x]) []
 		
-
+mapeamentoLogico a bin duplas = resolver a
+	where
+		resolver (Var a) = if
+		procurar (x:xs) = if 
