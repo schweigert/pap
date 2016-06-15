@@ -70,13 +70,17 @@ ret v1 (Just (op, v2)) = op v1 v2
 
 main = do {putStr "\nExpressao:";
           e <- getLine;
-		  case expToTree e of
+		  case expToTree ([x | x <- e, x /= ' ']) of
 			Left err -> putStr ((show err)++ "\n")
-			Right r  -> putStr ((show r) ++ "\n")}
+			Right arv  -> do {
+				putStr ("Arvore criada: \n");
+				putStr ((show arv) ++ "\n");
+				putStr "Variáveis: \n";
+				putStr (show (mapear arv)++"\n")
+			}}
 
 expToTree e = parse elang "Erro:" e
-
-
+	
 
 -- E: FE'
 elang = do {
@@ -201,16 +205,29 @@ solve (Value a) = a
 solve (And a b) = (solve a) && (solve b)
 solve (Or a b) = (solve a) || (solve b)
 solve (Imp a b) = imp (solve a) (solve b)
+	where
+		imp False False = True
+		imp False True = True
+		imp True False = False
+		imp True True = True
 solve (Bimp a b) = bimp (solve a) (solve b)
+	where
+		bimp False False = True
+		bimp False True = False
+		bimp True False = False
+		bimp True True = True	
 solve (Not a) = if (solve a) then False else True
 solve (Var a) = True
 
-imp False False = True
-imp False True = True
-imp True False = False
-imp True True = True
-
-bimp False False = True
-bimp False True = False
-bimp True False = False
-bimp True True = True
+mapear e = [x | x <- mapear_ e, x 
+	where
+		mapear_ (Value _) = []
+		mapear_ (And a b) = mapear_ a ++ mapear_ b
+		mapear_ (Or a b) = mapear_ a ++ mapear_ b
+		mapear_ (Imp a b) = mapear_ a ++ mapear_ b
+		mapear_ (Bimp a b) = mapear_ a ++ mapear_ b
+		mapear_ (Not a) = mapear_ a
+		mapear_ (Var a) = [a]
+		remover a [] = []
+		remover a (x:xs) = if a == x then remover xs else x : remover xs
+		
