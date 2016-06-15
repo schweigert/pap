@@ -1,13 +1,12 @@
 -- Este código está protegido pela lei dos homens e pela leis de Deus, pq néh
 --só ele sabe como essa desgraça funciona
 
-{-# LANGUAGE FlexibleContexts #-}
--- Feito por Marlon Henry Schweigert
+
 
 import Text.ParserCombinators.Parsec
 import Data.Char
 
-data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp Exp | Bimp Exp Exp | Par Exp | Var String deriving Show
+data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp Exp | Bimp Exp Exp | Var String deriving Show
 
 {-
 
@@ -201,8 +200,17 @@ wlang = do {
 solve (Value a) = a
 solve (And a b) = (solve a) && (solve b)
 solve (Or a b) = (solve a) || (solve b)
+solve (Imp a b) = imp (solve a) (solve b)
+solve (Bimp a b) = bimp (solve a) (solve b)
+solve (Not a) = if (solve a) then False else True
+solve (Var a) = True
 
 imp False False = True
 imp False True = True
 imp True False = False
 imp True True = True
+
+bimp False False = True
+bimp False True = False
+bimp True False = False
+bimp True True = True
