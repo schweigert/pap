@@ -1,0 +1,8 @@
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\bin\Debug\Trab.exe.config
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\bin\Debug\Trab.XML
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\bin\Debug\Trab.exe
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\bin\Debug\Trab.pdb
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\bin\Debug\FSharp.Core.dll
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\bin\Debug\FSharp.Core.xml
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\obj\Debug\Trab.exe
+C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\Trab\obj\Debug\Trab.pdb
