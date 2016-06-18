@@ -250,8 +250,9 @@ mapear e = removeDuplicates mapa
 		removeDuplicates = foldl (\seen x -> if x `elem` seen
                                       then seen
                                       else seen ++ [x]) []
-		
+{-		
 mapeamentoLogico a bin duplas = resolver a
 	where
 		resolver (Var a) = if
-		procurar (x:xs) = if 
+		procurar (x:xs) = if
+-} 
