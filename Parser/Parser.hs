@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 -- Este código está protegido pela lei dos homens e pela leis de Deus, pq néh
 --só ele sabe como essa desgraça funciona
 
