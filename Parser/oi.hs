@@ -68,7 +68,7 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp Exp | Bimp 
 ret v1 Nothing = v1
 ret v1 (Just (op, v2)) = op v1 v2
 
-bin m n = take m (reverse (toBin n) ++ ['0'..])
+bin m n = take m (reverse (toBin n) ++ ['0','0'..])
 	where
 		toBin 1 = "1"
 		toBin 0 = "0"
@@ -80,6 +80,17 @@ atribui a = montar a [0..]
 		montar [] _ = []
 		montar (x:xs) (y:ys) = (x,y): montar xs ys
 
+
+
+resolverParanaue a [] duplas = []
+resolverParanaue a (x:xs) duplas = solve(arvore):resolverParanaue a xs duplas
+        where
+                arvore = mapeamentoLogico a x duplas
+                
+
+
+        
+
 main = do {putStr "\nExpressao:";
           e <- getLine;
 		  case expToTree ([x | x <- e, x /= ' ']) of
@@ -89,13 +100,24 @@ main = do {putStr "\nExpressao:";
 				putStr ("Arvore criada: \n")
 				putStr ((show arv) ++ "\n")
 				putStr "Variáveis: \n"
-				let lista = mapear(arv)
-				    binli = map (bin (length lista)) [0..(length lista)^2 - 1]
-				putStr (show (lista)++"\n")
+				let variaveis = atribui(mapear(arv))
+				    binli = map (bin (length variaveis)) [0..(length variaveis)^2 - 1]
+				    possibilidade1 = mapeamentoLogico arv (binli!!0) variaveis
+				putStr (show (variaveis)++"\n")
+				putStr ("Possibilidades:\n")
 				putStr (show (binli)++"\n")
-				
-				
+				putStr ("Testando Possibilidades...\n")
+				let resposta = resolverParanaue arv binli variaveis
+				putStr (imprimirResp binli resposta resposta)
+
 			}
+
+verificarResp [] = False
+verificarResp (x:xs) = x || verificarResp xs
+
+imprimirResp [] _ a = "Possui Solucao? \t"++(show (verificarResp a))++("\n")
+imprimirResp (x:xs) (y:ys) a = (show x )++ " | " ++(show y)++ "\n" ++ (imprimirResp xs ys a)
+        
 
 expToTree e = parse elang "Erro:" e
 	
@@ -261,3 +283,5 @@ mapeamentoLogico a bin duplas = resolver a
 		resolver (Bimp a b) = Bimp (resolver a) (resolver b)
 		resolver (Not a) = Not (resolver a)
  		procurar (x:xs) e = if fst x == e then snd x else procurar xs e
+ 		
+
