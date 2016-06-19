@@ -1,6 +1,7 @@
 -- Este código está protegido pela lei dos homens e pela leis de Deus, pq néh
 --só ele sabe como essa desgraça funciona
 
+--
 
 
 import Text.ParserCombinators.Parsec
@@ -68,7 +69,7 @@ data Exp = Value Bool | And Exp Exp | Or Exp Exp | Not Exp | Imp Exp Exp | Bimp 
 ret v1 Nothing = v1
 ret v1 (Just (op, v2)) = op v1 v2
 
-bin m n = take m (reverse (toBin n) ++ ['0','0'..])
+bin m n = (take (m - length (toBin n)) ['0','0'..]) ++ reverse (toBin n)
 	where
 		toBin 1 = "1"
 		toBin 0 = "0"
