@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 -- Este código está protegido pela lei dos homens e pela leis de Deus, pq néh
 --só ele sabe como essa desgraça funciona
 
@@ -102,7 +103,8 @@ main = do {putStr "\nExpressao:";
 				putStr ((show arv) ++ "\n")
 				putStr "Variáveis: \n"
 				let variaveis = atribui(mapear(arv))
-				    binli = map (bin (length variaveis)) [0..(length variaveis)^2 - 1]
+--				    binli = map (bin (length variaveis)) [0..(length variaveis)^2 - 1]
+				    binli = map (bin (length variaveis)) [0..(2 ^ length variaveis ) - 1]
 				    possibilidade1 = mapeamentoLogico arv (binli!!0) variaveis
 				putStr (show (variaveis)++"\n")
 				putStr ("Possibilidades:\n")
