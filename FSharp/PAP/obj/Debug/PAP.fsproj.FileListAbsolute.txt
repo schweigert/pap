@@ -1,8 +1,0 @@
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\bin\Debug\PAP.exe.config
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\bin\Debug\PAP.XML
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\bin\Debug\PAP.exe
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\bin\Debug\PAP.pdb
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\bin\Debug\FSharp.Core.dll
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\bin\Debug\FSharp.Core.xml
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\obj\Debug\PAP.exe
-C:\Users\Marlon Henry\Documents\GitHub\UDESC\BCC\PAP\FSharp\PAP\obj\Debug\PAP.pdb
