@@ -1,0 +1,187 @@
+
+
+\documentclass[12pt]{article}
+\usepackage{listings}
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+ 
+\usepackage[brazil]{babel}   
+%\usepackage[latin1]{inputenc}  
+\usepackage[utf8]{inputenc}  
+% UTF-8 encoding is recommended by ShareLaTex
+
+     
+\sloppy
+
+\title{Paradigmas de Programação \\ FSharp}
+
+\author{Marlon Henry Schweigert, Jonathan Oliveira}
+
+
+\address{Centro de Ciências Tecnológicas -- Universidade do Estado de Santa Catarina (UDESC)
+}
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{bluekeywords}{rgb}{0.13,0.13,1}
+\definecolor{greencomments}{rgb}{0,0.5,0}
+\definecolor{turqusnumbers}{rgb}{0.17,0.57,0.69}
+\definecolor{redstrings}{rgb}{0.5,0,0}
+
+\lstdefinelanguage{FSharp}
+                {morekeywords={let, new, match, with, rec, open, module, namespace, type, of, member, and, for, in, do, begin, end, fun, function, try, mutable, if, then, else},
+    keywordstyle=\color{bluekeywords},
+    sensitive=false,
+    morecomment=[l][\color{greencomments}]{///},
+    morecomment=[l][\color{greencomments}]{//},
+    morecomment=[s][\color{greencomments}]{{(*}{*)}},
+    morestring=[b]",
+    stringstyle=\color{redstrings}
+    }
+
+\begin{document} 
+\lstset{language=FSharp}
+
+\maketitle
+
+     
+\begin{resumo} 
+Este documento apresenta as principais características da linguagem de programação FSharp, sendo base para o seminário final da matéria de Paradigmas de Programação, ministrado pelo Professor Doutor Cristiano Damiani Vasconcellos.
+\end{resumo}
+
+
+\section{Introdução}
+
+A linguagem de programação FSharp foi desenvolvida por Don Syme, nos laboratórios da Microsoft Research, com o objetivo de atender os 3 principais paradigmas de programação utilizando as bibliotecas .NET: Programação Funcional, Programação Imperativa e Programação Orientada a Objetos.
+
+
+\section{FSharp}
+
+Tendo sua performance igualada a C++ e OCaml, pertencendo a família das linguagens ML (ao lado de CSharp, Visual Basic, entre outros), conta com segurança e inferência de tipos, sendo uma forma eficiênte de programação funcional com as bibliotecas do .NET Framework. Como citado por Yana Kellen \cite{yanakellen}, o seu desenvolvimento atual é, grande parte, com foco em programação paralela, sendo fortemente utilizada na programação financeira quantitativa (antes dominado pelo Cobol), comercio de energia e jogos para Facebook.
+
+A linguagem pode ser compilada ou interpretada. Ambos, compilador e interpretador, podem ser baixados no site oficial da linguagem \cite{fsharp}. Para distros ubuntu e debian, o PPA do compilador já está incluso. Um alternativa de compilador é o projeto MONO. Um projeto de compilador que surgiu com a ideia de bater de frente com o pacote de compiladores da Microsoft.
+
+Atualmente o compilador da linguagem é OpenSorce e mantida pela Microsoft e MONO, em uma parceria realizada no inicio de 2016.
+
+\section{Critérios}
+
+Os principais critérios do FSharp em sua Sintaxe são:
+
+- Legibilidade: Próximo de uma linguagem matemática;
+
+- Redigibilidade: Indentação mais econômica, economia de linhas desnecessárias como blocos, estruturas. Usa a tabulação como auxilio para a sua economia, como Python e Haskell.
+
+- Confiabilidade: Programas podem ser facilmente verificados;
+
+
+\section{Características}
+
+As principais características em FSharp é a sua simplicidade, ortogonalidade, portabilidade, expressividade, e reusabilidade. Cada aspecto citado é levado em conta em sua sintaxe e maneira de utilizar.
+
+- Simplicidade: Maior simplicidade Sintática.
+
+- Ortogonalidade: Um nome pode tanto receber um valor final, quanto uma função de avaliação "curried".
+
+- Portabilidade: Beneficía-se do .NET Framework / MONO;
+
+- Expressividade: Vantagens da OO somada a Natureza declarativa da programação funcional;
+
+- Reusabilidade: Conta com vantagens funcionais;
+
+\subsection{Exemplos de Código-Fonte}
+
+Exemplo 1: Olá mundo
+\begin{lstlisting}
+    printfn "Ola mundo"
+\end{lstlisting}
+Exemplo 2: Declarações
+\begin{lstlisting}
+    let a = 1
+    let b = 3u
+    let c = "texto pequeno"
+\end{lstlisting}    
+Exemplo 3: Tuplas e Listas
+\begin{lstlisting}
+    let tupla = ("direita", "esquerda")
+    let lista = [1;2;3;4;5]
+ \end{lstlisting}     
+Exemplo 4: Recursividade
+\begin{lstlisting}
+    let rec fat n =
+        if n = 0
+        then 1
+        else n * fat (n-1)
+ \end{lstlisting}  
+Exemplo 5: Fibonacci
+ \begin{lstlisting}
+(* Pela Fórmula *)
+let rec fib n =
+    match n with
+    | 0 | 1 -> n
+    | _ -> fib (n - 1) + fib (n - 2)
+ 
+(* Utilizando zip *)
+let rec fibs = seq {
+    yield! [1; 1];
+    for (x, y) in Seq.zip fibs (Seq.skip 1 fibs) -> x + y }
+ 
+(* Utilizando |> *)
+[1 .. 10]
+|> List.map     fib
+|> List.filter  (fun n -> (n % 2) = 0)
+|> printlist
+ 
+(* O mesmo, usando repetição *)
+[ for i in 1..10 do
+    let r = fib i
+    if r % 2 = 0 then yield r ]
+|> printlist 
+ 
+ \end{lstlisting}
+Exemplo 6: Funções Lambda
+\begin{lstlisting}
+let add = (fun x y -> x + y)
+add 2 2
+
+
+let twoTest test =
+    test 2
+twoTest (fun x -> x < 0)
+
+
+let firstHundred = [0..100]
+let doubled = List.map (fun x -> x * 2)
+
+\end{lstlisting}
+Exemplo 7: Listas
+
+\begin{lstlisting}
+List.sum (List.map (fun x -> x * 2) 
+    (List.filter (fun x -> x % 2 = 0) [0..100]))
+\end{lstlisting}
+Exemplo 8: One line Source
+
+\begin{lstlisting}
+
+// Composicao de funcao
+
+[0..100] // Pega uma lista de 0 - 100
+|> List.filter (fun x -> x % 2 = 0)  // Aplica um filtro
+|> List.map (fun x -> x * 2) // Multiplica por 2
+|> List.sum // Retorna o somatorio do resultado
+\end{lstlisting}
+
+Este e muitos outros exemplos podem ser encontrados no site Try F# \cite{tryfs}.
+
+
+
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}
+\end{lstlisting}
